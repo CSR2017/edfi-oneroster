@@ -142,7 +142,10 @@ jobs:
 
       - name: Install dependencies
         run: npm ci 
-        
+
+      - name: Install Bruno CLI
+        run: npm install --no-save @usebruno/cli
+  
       - name: Run Bruno E2E tests (5.2.0)
         shell: pwsh
         run: |
