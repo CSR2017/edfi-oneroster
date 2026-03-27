@@ -144,7 +144,11 @@ jobs:
         run: npm ci 
 
       - name: Install Bruno CLI
-        run: npm install --no-save @usebruno/cli
+        run: npm install -g @usebruno/cli@3.2.0
+
+      - name: Verify Bruno
+        shell: pwsh
+        run: bru --version
   
       - name: Run Bruno E2E tests (5.2.0)
         shell: pwsh
