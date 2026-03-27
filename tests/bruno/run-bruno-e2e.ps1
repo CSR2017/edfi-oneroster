@@ -88,6 +88,7 @@ function Setup-EnvironmentAndContainers {
         $waited += 5
     }
     if (-not $allHealthy) {
+        docker ps
         Write-Host "--- edfi-ods-api logs (last 25 lines) ---"
         docker logs --tail 25 edfi-ods-api || Write-Host "No logs for edfi-ods-api"
         Write-Host "--- edfi-oneroster logs (last 25 lines) ---"
