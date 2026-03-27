@@ -88,11 +88,12 @@ function Setup-EnvironmentAndContainers {
         $waited += 5
     }
     if (-not $allHealthy) {
-        Write-Error "Timeout waiting for API URLs to become healthy."
         Write-Host "--- edfi-ods-api logs (last 25 lines) ---"
         docker logs --tail 25 edfi-ods-api || Write-Host "No logs for edfi-ods-api"
         Write-Host "--- edfi-oneroster logs (last 25 lines) ---"
         docker logs --tail 25 edfi-oneroster || Write-Host "No logs for edfi-oneroster"
+        
+        Write-Error "Timeout waiting for API URLs to become healthy."       
         exit 1
     }
     Write-Host "All required API URLs are healthy."
