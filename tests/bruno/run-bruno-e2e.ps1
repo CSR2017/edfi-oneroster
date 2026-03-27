@@ -66,7 +66,7 @@ function Setup-EnvironmentAndContainers {
     # 3. Wait for API URLs to be healthy
     Write-Host "Waiting for https://localhost/api and https://localhost/oneroster-api to be healthy..."
     $urls = @('https://localhost/api', 'https://localhost/oneroster-api')
-    $maxWaitSeconds = 250
+    $maxWaitSeconds = 300
     $waited = 0
     $allHealthy = $false
     while ($waited -lt $maxWaitSeconds) {
