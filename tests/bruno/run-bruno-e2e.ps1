@@ -132,17 +132,24 @@ if ($NeedEnvironmentSetup) {
 # Run Bruno tests with NODE_TLS_REJECT_UNAUTHORIZED=0 for local testing
 Write-Host "Running Bruno E2E tests with NODE_TLS_REJECT_UNAUTHORIZED=0..."
 $env:NODE_TLS_REJECT_UNAUTHORIZED = "0"
-Push-Location "$PSScriptRoot"
-npx bru run tests --env-file "$PSScriptRoot/environments/local.bru" -r
-Pop-Location
 
-if ($LASTEXITCODE -eq 0) {
+Push-Location $PSScriptRoot
+
+try {
+    npx bru run tests --env-file environments/local.bru -r
+
+    if ($LASTEXITCODE -ne 0) {
+        Write-Error "Bruno tests failed with exit code $LASTEXITCODE."
+        exit $LASTEXITCODE
+    }
+
     Write-Host "Bruno tests completed successfully."
-} else {
-    Write-Error "Bruno tests failed."
-    exit 2
+}
+finally {
+    # Stop all services after tests
+    $stopScript = Join-Path $PSScriptRoot '..\..\compose\stop-services.ps1'
+    & $stopScript -Purge -EnvFile "$PSScriptRoot\environments\$Version.env"
+
+    Pop-Location
 }
 
-# Stop all services after tests
-$stopScript = Join-Path $PSScriptRoot '..\..\compose\stop-services.ps1'
-& $stopScript -Purge -EnvFile "$PSScriptRoot\environments\$Version.env"
