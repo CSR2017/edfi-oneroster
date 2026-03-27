@@ -148,7 +148,8 @@ try {
 finally {
     # Stop all services after tests
     $stopScript = Join-Path $PSScriptRoot '..\..\compose\stop-services.ps1'
-    & $stopScript -Purge -EnvFile "$PSScriptRoot\environments\$Version.env"
+    $envFilePath = Join-Path $PSScriptRoot "environments\$Version.env"
+    & $stopScript -Purge -EnvFile $envFilePath
 
     Pop-Location
 }
