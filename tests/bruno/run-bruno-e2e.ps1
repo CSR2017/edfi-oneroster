@@ -103,6 +103,27 @@ function Setup-EnvironmentAndContainers {
 
 Write-Host "Running Bruno E2E tests for version $Version" -ForegroundColor Green
 
+# Only copy SSL files if they do not already exist in the destination directory
+$sslSourceDir = Join-Path $PSScriptRoot "test-certs\ssl"
+$sslDestDir = Join-Path $PSScriptRoot '..\..\compose\ssl'
+if (Test-Path $sslSourceDir) {
+    $copied = $false
+    Get-ChildItem -Path $sslSourceDir -File | ForEach-Object {
+        $destFile = Join-Path $sslDestDir $_.Name
+        if (-not (Test-Path $destFile)) {
+            Copy-Item -Path $_.FullName -Destination $sslDestDir
+            $copied = $true
+        }
+    }
+    if ($copied) {
+        Write-Host "Copied missing SSL files to $sslDestDir."
+    } else {
+        Write-Host "All SSL files already exist in $sslDestDir. No copy needed."
+    }
+} else {
+    Write-Warning "SSL source directory '$sslSourceDir' not found. Ensure SSL certificates are in place for nginx."
+}
+
 # Only set up environment and containers if requested
 if ($NeedEnvironmentSetup) {
     Setup-EnvironmentAndContainers -Version $Version
