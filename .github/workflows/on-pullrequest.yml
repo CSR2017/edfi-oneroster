@@ -143,6 +143,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Update certificates
+        run: cp -r ../../tests/bruno/test-certs/ssl ../../compose/ssl
+        
       - name: Run Bruno E2E tests (5.2.0)
         shell: pwsh
         run: |
