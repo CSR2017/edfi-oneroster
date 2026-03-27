@@ -89,6 +89,8 @@ function Setup-EnvironmentAndContainers {
     }
     if (-not $allHealthy) {
         Write-Error "Timeout waiting for API URLs to become healthy."
+        docker logs --tail 25 edfi-ods-api
+        docker logs --tail 25 edfi-oneroster-api
         exit 1
     }
     Write-Host "All required API URLs are healthy."
