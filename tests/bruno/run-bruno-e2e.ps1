@@ -133,7 +133,7 @@ if ($NeedEnvironmentSetup) {
 Write-Host "Running Bruno E2E tests with NODE_TLS_REJECT_UNAUTHORIZED=0..."
 $env:NODE_TLS_REJECT_UNAUTHORIZED = "0"
 Push-Location "$PSScriptRoot"
-npx bru run .\tests --env-file "$PSScriptRoot/environments/local.bru" -r
+npx bru run tests --env-file "$PSScriptRoot/environments/local.bru" -r
 Pop-Location
 
 if ($LASTEXITCODE -eq 0) {
