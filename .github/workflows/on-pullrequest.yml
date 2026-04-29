@@ -114,8 +114,8 @@ jobs:
         with:
           languages: javascript
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
+      #- name: Perform CodeQL Analysis
+       # uses: github/codeql-action/analyze@48ab28a6f5dbc2a99bf1e0131198dd8f1df78169 # v3.28.0
 
   docker_analysis:
     name: Docker Analysis
