@@ -103,6 +103,13 @@ function Setup-EnvironmentAndContainers {
         $waited += 5
     }
     if (-not $allHealthy) {
+        Write-Host "--- Docker container status before timeout ---"
+        docker ps -a
+        Write-Host "--- Last 40 lines of edfi-oneroster container logs ---"
+        docker logs --tail 40 edfi-oneroster
+        Write-Host "--- Last 40 lines of nginx container logs ---"
+        docker logs --tail 40 nginx
+        
         Write-Error "Timeout waiting for API URLs to become healthy."
         exit 1
     }
