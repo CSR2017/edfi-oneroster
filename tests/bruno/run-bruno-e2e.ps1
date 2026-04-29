@@ -103,6 +103,13 @@ function Setup-EnvironmentAndContainers {
         $waited += 5
     }
     if (-not $allHealthy) {
+        Write-Host "--- Docker container status before timeout ---"
+        docker ps -a
+        Write-Host "--- Last 40 lines of edfi-oneroster container logs ---"
+        docker logs --tail 40 edfi-oneroster
+        Write-Host "--- Last 40 lines of nginx container logs ---"
+        docker logs --tail 40 nginx
+        
         Write-Error "Timeout waiting for API URLs to become healthy."
         exit 1
     }
@@ -154,6 +161,12 @@ try {
     Write-Host "Bruno tests completed successfully."
 }
 finally {
+    # Log last 50 lines of logs for edfi-oneroster and nginx containers
+    Write-Host "--- Last 50 lines of edfi-oneroster container logs ---"
+    docker logs --tail 50 edfi-oneroster
+    Write-Host "--- Last 50 lines of nginx container logs ---"
+    docker logs --tail 50 nginx
+    
     # Stop all services after tests
     $stopScript = Join-Path $PSScriptRoot '..\..\stack\stop-services.ps1'
     $envFilePath = Join-Path $PSScriptRoot "environments\$Version.env"
