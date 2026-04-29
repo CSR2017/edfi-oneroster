@@ -154,6 +154,12 @@ try {
     Write-Host "Bruno tests completed successfully."
 }
 finally {
+    # Log last 50 lines of logs for edfi-oneroster and nginx containers
+    Write-Host "--- Last 50 lines of edfi-oneroster container logs ---"
+    docker logs --tail 50 edfi-oneroster
+    Write-Host "--- Last 50 lines of nginx container logs ---"
+    docker logs --tail 50 nginx
+    
     # Stop all services after tests
     $stopScript = Join-Path $PSScriptRoot '..\..\stack\stop-services.ps1'
     $envFilePath = Join-Path $PSScriptRoot "environments\$Version.env"
