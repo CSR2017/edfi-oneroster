@@ -1,7 +1,7 @@
 # Runs Ed-Fi OneRoster stack and Bruno E2E tests
 param(
     [Parameter(Mandatory=$false)]
-    [ValidateSet('4.0.0','5.2.0')]
+    [ValidateSet('4.0.0','5.2.0','6.1.0')]
     [string]$Version = '5.2.0',
     [switch]$NeedEnvironmentSetup,
     [string]$BrunoConfig = "ci.bru",
@@ -177,10 +177,19 @@ function Setup-EnvironmentAndContainers {
         Start-Sleep -Seconds 5
         $waited += 5
     }
-    if (-not $allHealthy) {
-        Write-Error "Timeout waiting for API URLs to become healthy."
-        exit 1
-    }
+   if (-not $allHealthy) {
+    Write-Host "OneRoster container status:" -ForegroundColor Yellow
+    docker ps -a --filter "name=edfi-oneroster"
+
+    Write-Host "OneRoster container health:" -ForegroundColor Yellow
+    docker inspect edfi-oneroster --format '{{json .State.Health}}'
+
+    Write-Host "OneRoster container logs:" -ForegroundColor Yellow
+    docker logs edfi-oneroster --tail 300
+
+    Write-Error "Timeout waiting for API URLs to become healthy."
+    exit 1
+}
     Write-Host "All required API URLs are healthy."
   }
 
